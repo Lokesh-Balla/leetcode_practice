@@ -5,21 +5,22 @@ import "fmt"
 // https://leetcode.com/problems/course-schedule/
 
 func checkLoop(key int, adjacencyList map[int][]int, visited map[int]bool) bool {
-
 	if visited[key] {
 		return true
 	}
+
+	if val, ok := adjacencyList[key]; ok && len(val) == 0 {
+		return false
+	}
+	
 	visited[key] = true
-
-	if val, ok := adjacencyList[key]; ok {
-		for _, x := range val {
-			if checkLoop(x, adjacencyList, visited) {
-				return true
-			}
+	for _, x := range adjacencyList[key] {
+		if checkLoop(x, adjacencyList, visited) {
+			return true
 		}
-
 	}
 
+	visited[key] = false
 	adjacencyList[key] = []int{}
 	return false
 }
